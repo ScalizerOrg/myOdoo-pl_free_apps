@@ -1,1 +1,4 @@
-from . import project, planning_template, project_forecast
+from . import project
+from . import planning_template
+from . import project_forecast
+from . import planning_analysis_report
