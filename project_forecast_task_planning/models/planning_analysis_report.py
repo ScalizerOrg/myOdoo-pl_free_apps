@@ -8,7 +8,7 @@ class PlanningAnalysisReport(models.Model):
     _inherit = "planning.analysis.report"
 
     task_id = fields.One2many('project.task', string='Task', compute='_compute_task_id',
-                              search='_search_task_id')
+                              search='_search_task_id', store=True)
 
     def _compute_task_id(self):
         for slot in self:
