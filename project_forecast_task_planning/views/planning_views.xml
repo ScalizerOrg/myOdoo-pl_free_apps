@@ -101,7 +101,7 @@
     <record id="planning_action_schedule_by_project" model="ir.actions.act_window">
         <field name="name">Schedule by Project</field>
         <field name="res_model">planning.slot</field>
-        <field name="view_mode">gantt,calendar,tree,form,kanban</field>
+        <field name="view_mode">gantt,calendar,list,form,kanban</field>
         <field name="context">{
             'search_default_group_by_project': 1, 'planning_groupby_project': True,
             'planning_expand_resource': 1, 'planning_expand_role': 1, 'planning_expand_project': 1,
@@ -128,7 +128,7 @@
     <record id="project_forecast_action_schedule_by_employee" model="ir.actions.act_window">
         <field name="name">Schedule by Resource</field>
         <field name="res_model">planning.slot</field>
-        <field name="view_mode">gantt,calendar,tree,form,kanban</field>
+        <field name="view_mode">gantt,calendar,list,form,kanban</field>
         <field name="view_id" ref="project_forecast.planning_view_gantt" />
         <field name="context">{
             'search_default_group_by_resource': 1, 'planning_expand_resource': 1,
