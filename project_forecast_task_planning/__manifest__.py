@@ -12,7 +12,12 @@
     "website": "https://myodoo.pl",
     "category": "Project Management",
     "version": "18.0.1.0.0",
-    "depends": ["project", "planning", "project_forecast"],
+    "depends": [
+        "project",
+        "planning",
+        "project_forecast",
+        "planning_holidays"
+    ],
     "data": [
         "views/planning_views.xml",
         "views/planning_template_views.xml",

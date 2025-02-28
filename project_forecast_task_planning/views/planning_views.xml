@@ -79,7 +79,7 @@
             <xpath expr="//filter[@name='group_by_project']" position="after">
                 <filter name="group_by_task" string="Task" context="{'group_by': 'task_id'}" />
                 <filter name="group_by_parent" string="Parent Task"
-                    context="{'group_by': 'parent_id'}" groups="project.group_subtask_project" />
+                    context="{'group_by': 'parent_id'}"/>
             </xpath>
         </field>
     </record>
@@ -206,8 +206,8 @@
     </record>
 
     <!-- menus -->
-    <menuitem id="planning_menu_schedule_by_project" name="By Project" sequence="30"
-        parent="planning.planning_menu_schedule" action="planning_action_schedule_by_project" />
+    <!--<menuitem id="planning_menu_schedule_by_project" name="By Project" sequence="30"
+        parent="planning.planning_menu_schedule" action="planning_action_schedule_by_project" />-->
 
     <!--  override of the schedule by resource menu entry to take into account the option
     project_forecast_display_allocated_time  -->
