@@ -117,7 +117,7 @@ class PlanningShift(models.Model):
             ):
                 raise ValidationError(_("Your task is not in the selected project."))
 
-    def _read_group_task_id(self, tasks, domain, order):
+    def _read_group_task_id(self, tasks, domain):
         if (
             "show_tasks_without_slot" in self.env.context
             and "active_ids" in self.env.context
@@ -135,7 +135,7 @@ class PlanningShift(models.Model):
         ):
             if ("task_id", "=") in dom_tuples or ("task_id", "ilike") in dom_tuples:
                 filter_domain = self._expand_domain_m2o_groupby(domain, "task_id")
-                return self.env["project.task"].search(filter_domain, order=order)
+                return self.env["project.task"].search(filter_domain)
             filters = expression.AND(
                 [[("task_id.active", "=", True)], self._expand_domain_dates(domain)]
             )
@@ -242,7 +242,7 @@ class PlanningShift(models.Model):
             ):
                 slot.task_id = False
 
-    def _read_group_task_id(self, tasks, domain, order):
+    def _read_group_task_id(self, tasks, domain):
         if (
             "show_tasks_without_slot" in self.env.context
             and "active_ids" in self.env.context
@@ -260,7 +260,7 @@ class PlanningShift(models.Model):
         ):
             if ("task_id", "=") in dom_tuples or ("task_id", "ilike") in dom_tuples:
                 filter_domain = self._expand_domain_m2o_groupby(domain, "task_id")
-                return self.env["project.task"].search(filter_domain, order=order)
+                return self.env["project.task"].search(filter_domain)
             filters = expression.AND(
                 [[("task_id.active", "=", True)], self._expand_domain_dates(domain)]
             )
