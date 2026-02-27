@@ -1,6 +1,6 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
-from odoo.osv import expression
+from odoo.fields import Domain
 
 
 class PlanningShift(models.Model):
@@ -45,13 +45,10 @@ class PlanningShift(models.Model):
         compute="_compute_resource_id", store=True, readonly=False
     )
 
-    _sql_constraints = [
-        (
-            "project_required_if_task",
-            "CHECK( (task_id IS NOT NULL AND project_id IS NOT NULL) OR (task_id IS NULL) )",
-            "If the planning is linked to a task, the project must be set too.",
-        ),
-    ]
+    _project_required_if_task = models.Constraint(
+        "CHECK( (task_id IS NOT NULL AND project_id IS NOT NULL) OR (task_id IS NULL) )",
+        "If the planning is linked to a task, the project must be set too.",
+    )
 
     @api.depends("task_id", "allocated_hours", "project_id")
     def _compute_forecast_hours(self):
@@ -129,14 +126,14 @@ class PlanningShift(models.Model):
             if isinstance(dom, list) and len(dom) == 3
         ]
         if (
-            self._context.get("planning_expand_task")
+            self.env.context.get("planning_expand_task")
             and ("start_datetime", "<=") in dom_tuples
             and ("end_datetime", ">=") in dom_tuples
         ):
             if ("task_id", "=") in dom_tuples or ("task_id", "ilike") in dom_tuples:
                 filter_domain = self._expand_domain_m2o_groupby(domain, "task_id")
                 return self.env["project.task"].search(filter_domain)
-            filters = expression.AND(
+            filters = Domain.AND(
                 [[("task_id.active", "=", True)], self._expand_domain_dates(domain)]
             )
             return self.env["planning.slot"].search(filters).mapped("task_id")
@@ -226,22 +223,6 @@ class PlanningShift(models.Model):
             )
         return super(PlanningShift, self).write(values)
 
-    @api.depends("project_id", "template_id.project_id")
-    def _compute_task_id(self):
-        for slot in self:
-            if slot.project_id != slot.task_id.project_id:
-                slot.task_id = False
-            if slot.template_id:
-                slot.previous_template_id = slot.template_id
-                if slot.template_id.task_id:
-                    slot.task_id = slot.template_id.task_id
-            elif (
-                slot.previous_template_id
-                and not slot.template_id
-                and slot.previous_template_id.task_id == slot.task_id
-            ):
-                slot.task_id = False
-
     def _read_group_task_id(self, tasks, domain):
         if (
             "show_tasks_without_slot" in self.env.context
@@ -254,14 +235,14 @@ class PlanningShift(models.Model):
             if isinstance(dom, list) and len(dom) == 3
         ]
         if (
-            self._context.get("planning_expand_task")
+            self.env.context.get("planning_expand_task")
             and ("start_datetime", "<=") in dom_tuples
             and ("end_datetime", ">=") in dom_tuples
         ):
             if ("task_id", "=") in dom_tuples or ("task_id", "ilike") in dom_tuples:
                 filter_domain = self._expand_domain_m2o_groupby(domain, "task_id")
                 return self.env["project.task"].search(filter_domain)
-            filters = expression.AND(
+            filters = Domain.AND(
                 [[("task_id.active", "=", True)], self._expand_domain_dates(domain)]
             )
             return self.env["planning.slot"].search(filters).mapped("task_id")

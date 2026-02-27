@@ -1,6 +1,6 @@
 from odoo.exceptions import UserError
 from odoo import api, fields, models, _
-from odoo.osv import expression
+from odoo.fields import Domain
 
 import datetime
 import logging
@@ -17,7 +17,7 @@ class Task(models.Model):
     planned_hours = fields.Float("Initially Planned Hours", help='Time planned to achieve this task (including its sub-tasks).', tracking=True)
 
     def _compute_forecast_hours(self):
-        domain = expression.AND([
+        domain = Domain.AND([
             self._get_domain_compute_forecast_hours(),
             [('task_id', 'in', self.ids + self._get_all_subtasks().ids)]
         ])
