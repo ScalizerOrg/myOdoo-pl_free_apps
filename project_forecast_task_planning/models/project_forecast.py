@@ -202,7 +202,7 @@ class PlanningShift(models.Model):
                 continue
             user_to_assign = slot.task_id.user_ids
             if len(user_to_assign) > 1:
-                user_to_assign = (slot.role_id.employee_ids.user_id & user_to_assign)[
+                user_to_assign = (slot.role_id.resource_ids.employee_id.user_id & user_to_assign)[
                     :1
                 ] or user_to_assign[:1]
             slot.resource_id = user_to_assign.employee_id.resource_id
